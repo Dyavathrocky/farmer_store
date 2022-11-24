@@ -1,3 +1,4 @@
-/farmer_rnv/
+.venv
 __pycache__/
 db.sqlite3
+.DS_Store  # Mac only

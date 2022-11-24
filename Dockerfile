@@ -1,17 +1,16 @@
-#image
-FROM python:3.8-slim-buster
+FROM python:3.10.4-slim-bullseye
 
-#what and all Variable we need to define
+# Set environment variables
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-#set work directory
+# Set work directory
 WORKDIR /code
 
-#install dependices
-COPY ./requirments.txt .
-RUN pip install -r requirments.txt
+# Install dependencies
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt
 
-#copy project
+# Copy project
 COPY . .
