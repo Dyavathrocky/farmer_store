@@ -156,10 +156,12 @@ AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 )
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 ACCOUNT_SESSION_REMEMBER = True  # new
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False  # new
 ACCOUNT_USERNAME_REQUIRED = False  # new
 ACCOUNT_AUTHENTICATION_METHOD = "email"  # new
 ACCOUNT_EMAIL_REQUIRED = True  # new
 ACCOUNT_UNIQUE_EMAIL = True  # new
+DEFAULT_FROM_EMAIL = "rocky@gmail.com"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" 
