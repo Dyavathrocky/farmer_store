@@ -52,9 +52,10 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",  # new
     "allauth",  # new
     "allauth.account",  # new
-    # Local
+    # Local apps
     "accounts.apps.AccountsConfig",  # new
     "pages.apps.PagesConfig",  # new
+    "books.apps.BooksConfig",
 ]
 
 MIDDLEWARE = [
