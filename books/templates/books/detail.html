@@ -4,8 +4,39 @@
 
 {% block content %}
   <div class="book-detail">
+    {% if book.cover %}
+      <img  class="bookcover" src="{{ book.cover.url }}" alt="{{ book.title }}" srcset="">
+    {% endif %}
     <h2><a href="">{{ book.title }}</a></h2>
     <p>Author: {{ book.author }}</p>
     <p>Price: {{ book.price }}</p>
+    <div>
+      <h1>Reviews</h1>      
+      <table class="table",  border=4 , padding=12>
+        <tr>
+          <th>Review</th>
+          <th>Author</th>
+        </tr>
+        <tr>   
+        {% for reviews in book.reviews.all %}
+          <td>{{ reviews.review }}</td>
+          <td>{{ reviews.author }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
   </div>
 {% endblock content %}
+
+
+<table>
+  <tr>
+    <th>Review</th>
+    <th>Author</th>
+  </tr>
+  <tr>
+    <td>{{ reviews.review }}</td>
+    <td>{{ reviews.author }}</td>
+    <td>Germany</td>
+  </tr>
+</table>
