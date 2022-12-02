@@ -33,7 +33,7 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 #ALLOWED_HOSTS = []
 
 #Prod settings
-DEBUG = env.bool("DJANGO_DEBUG")
+DEBUG = env.bool("DJANGO_DEBUG" , default=False)
 ALLOWED_HOSTS = [".herokuapp.com", "localhost", "127.0.0.1"]
 
 
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
     "django.contrib.sites",  # new
     # Third-party
@@ -52,6 +53,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",  # new
     "allauth",  # new
     "allauth.account",  # new
+    "debug_toolbar", # for debug toolbar
     # Local apps
     "accounts.apps.AccountsConfig",  # new
     "pages.apps.PagesConfig",  # new
@@ -60,12 +62,14 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "django_project.urls"
@@ -139,7 +143,8 @@ USE_TZ = True
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]  # new
 STATIC_ROOT = BASE_DIR / "staticfiles"  # new
-STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"  # new
+# STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"  # new
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 #media url and media root
@@ -174,3 +179,18 @@ ACCOUNT_EMAIL_REQUIRED = True  # new
 ACCOUNT_UNIQUE_EMAIL = True  # new
 DEFAULT_FROM_EMAIL = "rocky@gmail.com"
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" 
+
+
+if DEBUG:
+    import socket  # only if you haven't already imported this
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
+
+SECURE_SSL_REDIRECT  = env.bool("SECURE_SSL_REDIRECT ", default = True)
+
+SECURE_HSTS_SECONDS = env.int("DJ_SECURE_HSTS_SECONDS", default=2592000)
+SECURE_HSTS_PRELOAD = env.bool("DJ_SECURE_HSTS_PRELOAD", default=True)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJ_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)
+
+SESSION_COOKIE_SECURE  = env.bool("DJ_SESSION_COOKIE_SECURE ", default=True)
+CSRF_COOKIE_SECURE = env.bool("DJ_CSRF_COOKIE_SECURE", default=True)

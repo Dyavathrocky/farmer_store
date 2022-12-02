@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin , PermissionRequiredMixin
 from django.views.generic import ListView , DetailView
 from .models import Book
@@ -17,4 +18,15 @@ class BookDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = "books/detail.html"
     login_url = "account_login"
     permission_required = "books.special_stat"
+    queryset = Book.objects.all().prefetch_related('reviews__author',)
+
+class SearchResultListView(ListView):
+    model = Book
+    context_object_name = "book_search"
+    template_name = "books/book_search.html"
+    
+    def get_queryset(self) :
+            query = self.request.GET.get("q")
+            return Book.objects.filter(Q(title__icontains=query)|Q(author__icontains=query))
+
 
